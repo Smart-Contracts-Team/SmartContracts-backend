@@ -53,6 +53,8 @@ public class UserController {
 
         User responseUser = new User();
         responseUser.setId(userId);
+        responseUser.setUsername(user.getUsername());
+        responseUser.setRuc(user.getRuc());
         responseUser.setFirstName(user.getFirstName());
         responseUser.setLastName(user.getLastName());
         responseUser.setTypeOfUser(user.getTypeOfUser());
@@ -60,6 +62,8 @@ public class UserController {
         responseUser.setBirthDate(user.getBirthDate());
         responseUser.setPhoto(user.getPhoto());
         responseUser.setPhone(user.getPhone());
+        responseUser.setLocation(user.getLocation());
+        responseUser.setRole(user.getRole());
 
         User userSaved = userService.updateUser(responseUser);
         return new ResponseEntity<User>(userSaved,HttpStatus.OK);
@@ -68,6 +72,8 @@ public class UserController {
     private UserDto convertToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
+                .username(user.getUsername())
+                .ruc(user.getRuc())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .typeOfUser(user.getTypeOfUser())
@@ -75,6 +81,7 @@ public class UserController {
                 .phone(user.getPhone())
                 .birthDate(user.getBirthDate())
                 .photo(user.getPhoto())
+                .location(user.getLocation())
                 .role(user.getRole())
                 .build();
     }

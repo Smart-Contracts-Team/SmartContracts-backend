@@ -5,9 +5,11 @@ import com.SmartContracts.upc.user.model.User;
 import com.SmartContracts.upc.user.model.UserDto;
 import com.SmartContracts.upc.user.repository.UserRepository;
 import com.SmartContracts.upc.user.service.UserService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService {
         User existingUser = getUserById(user.getId());
         if(existingUser != null){
             User userToUpdate = existingUser;
+            userToUpdate.setUsername(user.getUsername());
+            userToUpdate.setRuc(user.getRuc());
             userToUpdate.setFirstName(user.getFirstName());
             userToUpdate.setLastName(user.getLastName());
             userToUpdate.setTypeOfUser(user.getTypeOfUser());
@@ -38,6 +42,8 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setBirthDate(user.getBirthDate());
             userToUpdate.setPhoto(user.getPhoto());
             userToUpdate.setPhone(user.getPhone());
+            userToUpdate.setLocation(user.getLocation());
+            userToUpdate.setRole(user.getRole());
             return userRepository.save(userToUpdate);
         }else{
             return null;
