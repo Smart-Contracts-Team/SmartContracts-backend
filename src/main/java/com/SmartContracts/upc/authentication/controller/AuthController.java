@@ -23,7 +23,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // URL: http://localhost:8080/api/kitchentech/v1/auth/register
+    // URL: http://localhost:8080/api/smartcontract/v1/auth/register
     // Method: POST
 
     @Transactional
@@ -35,7 +35,7 @@ public class AuthController {
         return new ResponseEntity<AuthResponse>(authService.register(request), HttpStatus.CREATED);
     }
 
-    // URL: http://localhost:8080/api/kitchentech/v1/auth/login
+    // URL: http://localhost:8080/api/smartcontract/v1/auth/login
     // Method: POST
     @Transactional(readOnly = true)
     @PostMapping("/login")
