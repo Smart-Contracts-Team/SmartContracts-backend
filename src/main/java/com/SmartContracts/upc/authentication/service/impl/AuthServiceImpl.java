@@ -13,7 +13,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
@@ -34,12 +36,15 @@ public class AuthServiceImpl implements AuthService {
         User user = User.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
+                .username(registerRequest.getUsername())
                 .typeOfUser(registerRequest.getTypeOfUser())
                 .email(registerRequest.getEmail())
+                .ruc(registerRequest.getRuc())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .birthDate(registerRequest.getBirthDate())
                 .phone(registerRequest.getPhone())
                 .photo(registerRequest.getPhoto())
+                .location(registerRequest.getLocation())
                 .role(registerRequest.getRole())
                 .build();
         userRepository.save(user);
@@ -67,31 +72,8 @@ public class AuthServiceImpl implements AuthService {
         if(registerRequest == null){
             throw new ValidationException("El formato de registro no tiene que ser nulo.");
         }
-        if(registerRequest.getTypeOfUser()==null  ||
-                registerRequest.getTypeOfUser().isEmpty())
-        {
-            throw new ValidationException("El usuario necesita especificar su tipo");
-        }
-        if(registerRequest.getTypeOfUser().length()>100)
-        {
-            throw new ValidationException("El tipo de usuario es demasiado largo");
-        }
-        if(registerRequest.getFirstName()==null  ||
-                registerRequest.getFirstName().isEmpty())
-        {
-            throw new ValidationException("El nombre del usuario debe ser obligatorio");
-        }
-        if(registerRequest.getFirstName().length()>200)
-        {
-            throw new ValidationException("El nombre del usuario no debe exceder los 200 caracteres");
-        }
-        if(registerRequest.getLastName()==null || registerRequest.getLastName().isEmpty())
-        {
-            throw new ValidationException("El apellido del usuario debe ser obligatorio");
-        }
-        if(registerRequest.getLastName().length()>200)
-        {
-            throw new ValidationException("El apellido del usuario no debe exceder los 200 caracteres");
+        if(registerRequest.getUsername() == null || registerRequest.getUsername().isEmpty()){
+            throw new ValidationException("El usuario necesita especificar su username");
         }
         if (registerRequest.getEmail() == null || registerRequest.getEmail().isEmpty()) {
             throw new ValidationException("El email del usuario debe ser obligatorio");
@@ -105,7 +87,47 @@ public class AuthServiceImpl implements AuthService {
         if (registerRequest.getPassword().length() > 100) {
             throw new ValidationException("La contraseña del usuario no debe exceder los 100 caracteres");
         }
+        if(registerRequest.getRole() != Role.ADMIN && registerRequest.getRole() != Role.USER ){
+            throw new ValidationException("Selecciona rol válido, ADMIN o USER");
+        }
+        if(registerRequest.getTypeOfUser()==null  ||
+                registerRequest.getTypeOfUser().isEmpty())
+        {
+            throw new ValidationException("El usuario necesita especificar su tipo");
+        }
+        if (!"Influencer".equals(registerRequest.getTypeOfUser()) && !"Business".equals(registerRequest.getTypeOfUser())) {
+            throw new ValidationException("El tipo de usuario aceptado es Influencer o Business");
+        }
 
+        if ("Influencer".equals(registerRequest.getTypeOfUser())){ //Validaciones para influencer
+
+            if(registerRequest.getFirstName()==null  ||
+                    registerRequest.getFirstName().isEmpty())
+            {
+                throw new ValidationException("El nombre del usuario debe ser obligatorio");
+            }
+            if(registerRequest.getFirstName().length()>200)
+            {
+                throw new ValidationException("El nombre del usuario no debe exceder los 200 caracteres");
+            }
+            if(registerRequest.getLastName()==null || registerRequest.getLastName().isEmpty())
+            {
+                throw new ValidationException("El apellido del usuario debe ser obligatorio");
+            }
+            if(registerRequest.getLastName().length()>200)
+            {
+                throw new ValidationException("El apellido del usuario no debe exceder los 200 caracteres");
+            }
+        }
+        else{
+            if(registerRequest.getRuc() == null || registerRequest.getRuc().isEmpty()){
+                throw new ValidationException("El ruc es obligatorio en una empresa");
+            }
+            if(registerRequest.getRuc().length() > 30)
+            {
+                throw new ValidationException("El ruc es demasiado largo");
+            }
+        }
     }
 
     @Override
