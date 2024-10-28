@@ -28,7 +28,8 @@ public class SecurityConfig {
                         authRequest
                                 .requestMatchers("/api/smartcontract/v1/auth/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                .requestMatchers("/api/smartcontract/v1/user","/api/smartcontract/v1/service").authenticated()
+                                .requestMatchers("/api/smartcontract/v1/user","/api/smartcontract/v1/service",
+                                        "/api/smartcontract/v1/review").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
