@@ -48,7 +48,7 @@ public class ServiceController {
 
     @Transactional(readOnly = true)
     @GetMapping("category/{category}")
-    public ResponseEntity<List<ServiceU>> getServiceById(@PathVariable(name="category")String category){
+    public ResponseEntity<List<ServiceU>> getServiceByCategory(@PathVariable(name="category")String category){
         if(serviceService.getServiceByCategory(category)==null){
             return new ResponseEntity<List<ServiceU>>(HttpStatus.NOT_FOUND);
         }
