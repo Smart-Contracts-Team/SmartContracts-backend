@@ -7,7 +7,7 @@ import java.util.List;
 public interface ReviewService {
 
     public abstract List<Review> getAllReviews();
-    public abstract List<Review> getReviewsByUserId(Long userId);
+    public abstract List<Review> getReviewsByInfluencerId(Long influencerId);
     public abstract List<Review> getReviewsByServiceId(Long serviceId);
     public abstract Review getReviewById(Long id);
     public abstract Review createReview(Review review);

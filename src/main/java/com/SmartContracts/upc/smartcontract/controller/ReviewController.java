@@ -54,15 +54,15 @@ public class ReviewController {
         return new ResponseEntity<List<Review>>(reviewService.getReviewsByServiceId(serviceId),HttpStatus.OK);
     }
 
-    // URL: http://localhost:8080/api/smartcontract/v1/review/user/{userId}
+    // URL: http://localhost:8080/api/smartcontract/v1/review/influencer/{influencerId}
     // Method: GET
     @Transactional(readOnly = true)
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Review>>getReviewByUserId(@PathVariable(name="userId")Long userId ){
-        if(reviewService.getReviewsByUserId(userId) == null){
+    @GetMapping("/influencer/{influencerId}")
+    public ResponseEntity<List<Review>>getReviewsByInfluencerId(@PathVariable(name="influencerId")Long influencerId ){
+        if(reviewService.getReviewsByInfluencerId(influencerId) == null){
             return new ResponseEntity<List<Review>>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<List<Review>>(reviewService.getReviewsByUserId(userId),HttpStatus.OK);
+        return new ResponseEntity<List<Review>>(reviewService.getReviewsByInfluencerId(influencerId),HttpStatus.OK);
     }
 
     // URL: http://localhost:8080/api/smartcontract/v1/review

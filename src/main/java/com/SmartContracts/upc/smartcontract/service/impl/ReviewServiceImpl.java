@@ -23,8 +23,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getReviewsByUserId(Long userId) {
-        return reviewRepository.findByUserId(userId);
+    public List<Review> getReviewsByInfluencerId(Long influencerId) {
+        return reviewRepository.findByInfluencerId(influencerId);
     }
 
     @Override
