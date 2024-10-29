@@ -6,6 +6,7 @@ import com.SmartContracts.upc.smartcontract.model.Task;
 import com.SmartContracts.upc.smartcontract.repository.ServiceRepository;
 import com.SmartContracts.upc.smartcontract.repository.TaskRepository;
 import com.SmartContracts.upc.smartcontract.service.ServiceService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,17 +44,27 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    @Transactional
     public ServiceU createService(ServiceU service) {
+        // Guardar primero el servicio sin las tareas
+        List<Task> tasks = service.getTasks(); // Guardamos temporalmente la lista de tareas
+        service.setTasks(null); // Eliminamos las tareas antes de guardar el servicio
 
-        if (service.getTasks() != null) {
-            // Guarda cada tarea y la asocia al servicio
-            for (Task task : service.getTasks()) {
-                task.setServiceU(service);
-                taskRepository.save(task);
+        ServiceU savedService = serviceRepository.save(service); // Guardamos el servicio
+
+        // Si hay tareas, configuramos la relación y guardamos cada una
+        if (tasks != null) {
+            for (Task task : tasks) {
+                task.setServiceU(savedService);  // Asociamos la tarea con el servicio guardado
+                taskRepository.save(task);       // Guardamos la tarea en la base de datos
             }
+            savedService.setTasks(tasks); // Volvemos a añadir las tareas al servicio guardado
         }
-        return serviceRepository.save(service);
+
+        return savedService;
     }
+
+
 
     @Override
     public ServiceU updateService(ServiceU service) {
@@ -67,7 +78,7 @@ public class ServiceServiceImpl implements ServiceService {
             serviceToUpdate.setStarts(service.getStarts());
             serviceToUpdate.setPhoto(service.getPhoto());
             serviceToUpdate.setState(service.getState());
-            serviceToUpdate.setUser(service.getUser());
+            serviceToUpdate.setUserId(service.getUserId());
 
             // Manejo de tareas
             List<Task> updatedTasks = service.getTasks();
@@ -106,6 +117,11 @@ public class ServiceServiceImpl implements ServiceService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Task> getTasksByServiceId(Long serviceId) {
+        return taskRepository.findByServiceU_Id(serviceId);
     }
 
     @Override

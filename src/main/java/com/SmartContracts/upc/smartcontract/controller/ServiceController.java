@@ -1,6 +1,7 @@
 package com.SmartContracts.upc.smartcontract.controller;
 
 import com.SmartContracts.upc.smartcontract.model.ServiceU;
+import com.SmartContracts.upc.smartcontract.model.Task;
 import com.SmartContracts.upc.smartcontract.service.ServiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,12 +48,23 @@ public class ServiceController {
     // Method: GET
 
     @Transactional(readOnly = true)
-    @GetMapping("category/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<List<ServiceU>> getServiceByCategory(@PathVariable(name="category")String category){
         if(serviceService.getServiceByCategory(category)==null){
             return new ResponseEntity<List<ServiceU>>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<List<ServiceU>>(serviceService.getServiceByCategory(category),HttpStatus.OK);
+    }
+
+    // URL: http://localhost:8080/api/smartcontract/v1/service/task/{taskId}
+    // Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/task/{taskId}")
+    public ResponseEntity<List<Task>> getTaskSByServiceId(@PathVariable(name="taskId")Long taskId){
+        if(serviceService.getTasksByServiceId(taskId)==null){
+            return new ResponseEntity<List<Task>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<Task>>(serviceService.getTasksByServiceId(taskId),HttpStatus.OK);
     }
 
     // URL: http://localhost:8080/api/smartcontract/v1/service/user/{userId}
@@ -87,6 +99,7 @@ public class ServiceController {
         }
 
         serviceService.validateService(service);
+        service.setId(serviceId);
         return new ResponseEntity<ServiceU>(serviceService.updateService(service),HttpStatus.OK);
     }
 

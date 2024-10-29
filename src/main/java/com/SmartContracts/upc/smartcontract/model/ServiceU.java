@@ -46,9 +46,8 @@ public class ServiceU {
     @Column(name="final_date",nullable = false)
     private LocalDate finalDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
+    @Column(name="user_id",nullable = false)
+    private Long userId;
 
     @OneToMany(mappedBy = "serviceU", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
