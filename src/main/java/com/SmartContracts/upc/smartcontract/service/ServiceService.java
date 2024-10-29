@@ -1,6 +1,7 @@
 package com.SmartContracts.upc.smartcontract.service;
 
 import com.SmartContracts.upc.smartcontract.model.ServiceU;
+import com.SmartContracts.upc.smartcontract.model.Task;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ public interface ServiceService {
     public abstract ServiceU getServiceById(Long id);
     public abstract ServiceU createService(ServiceU service);
     public abstract ServiceU updateService(ServiceU service);
+    public abstract List<Task> getTasksByServiceId(Long serviceId);
     public abstract void deleteService(Long id);
     public void validateService(ServiceU service);
 }
