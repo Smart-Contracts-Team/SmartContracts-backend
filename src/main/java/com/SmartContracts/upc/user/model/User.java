@@ -24,14 +24,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="first_name", nullable = false, length = 100)
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name="first_name", nullable = true, length = 100)
     private String firstName;
 
-    @Column(name="last_name", nullable = false, length = 100)
+    @Column(name="last_name", nullable = true, length = 100)
     private String lastName;
 
     @Column(name="type_of_user", nullable = false, length = 100)
     private String typeOfUser;
+
+    @Column(name="ruc", nullable = true)
+    private String ruc;
 
     @Column(name="email", nullable = false, length = 200)
     private String email;
@@ -42,11 +48,14 @@ public class User implements UserDetails {
     @Column(name="phone", nullable = true, length = 20)
     private String phone;
 
-    @Column(name="birth_date", nullable = false)
+    @Column(name="birth_date", nullable = true)
     private LocalDate birthDate;
 
     @Column(name="photo", nullable = true)
     private String photo;
+
+    @Column(name="location", nullable = true)
+    private String location;
 
     @Enumerated(EnumType.STRING)
     private Role role;
