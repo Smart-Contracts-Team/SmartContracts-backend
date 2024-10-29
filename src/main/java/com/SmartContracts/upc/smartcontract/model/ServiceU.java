@@ -4,6 +4,10 @@ import com.SmartContracts.upc.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -36,8 +40,17 @@ public class ServiceU {
     @Column(name="state",nullable = false) // abierto, cerrado, ocupado
     private String state;
 
+    @Column(name="start_date",nullable = false)
+    private LocalDate startDate;
+
+    @Column(name="final_date",nullable = false)
+    private LocalDate finalDate;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
+    @OneToMany(mappedBy = "serviceU", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Task> tasks = new ArrayList<>();
 }
