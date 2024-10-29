@@ -14,4 +14,5 @@ public interface UserService {
     public abstract List<User> getAllUsers();
     public void existsUserById(Long Id);
     public void validateUser(UserDto user);
+    public void existsUserByEmail(String email);
 }
