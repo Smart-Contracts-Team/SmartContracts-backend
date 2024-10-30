@@ -20,8 +20,7 @@ public class UpcApplication {
 				registry.addMapping("/**")
 						.allowedOrigins("*") // URL de tu frontend
 						.allowedMethods("GET", "POST", "PUT", "DELETE") // Especifícalos explícitamente
-						.allowedHeaders("*") // Puedes especificar headers como "Content-Type", "Authorization"
-						.allowCredentials(true); // Permitir cookies si es necesario
+						.allowedHeaders("*"); // Permitir cookies si es necesario
 
 			}
 		};
