@@ -18,7 +18,7 @@ public class UpcApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:5173") // URL de tu frontend
+						.allowedOrigins("*") // URL de tu frontend
 						.allowedMethods("GET", "POST", "PUT", "DELETE") // Especifícalos explícitamente
 						.allowedHeaders("*") // Puedes especificar headers como "Content-Type", "Authorization"
 						.allowCredentials(true); // Permitir cookies si es necesario
