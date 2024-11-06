@@ -17,9 +17,10 @@ public class UpcApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:8080")
-						.allowedMethods("*");
+				registry.addMapping("/api/smartcontract/v1/**") // Aplica a todas las rutas
+						.allowedOrigins("*") // URL de tu frontend
+						.allowedMethods("*")
+						.allowedHeaders("*");
 			}
 		};
 	}

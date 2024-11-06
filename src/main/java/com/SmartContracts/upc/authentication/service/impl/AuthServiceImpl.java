@@ -51,6 +51,8 @@ public class AuthServiceImpl implements AuthService {
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .id(user.getId())
+                .success(true)
+                .typeOfUser(user.getTypeOfUser())
                 .build();
     }
 
@@ -60,9 +62,12 @@ public class AuthServiceImpl implements AuthService {
         UserDetails user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
         String token = jwtService.getToken(user);
         long id = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow().getId();
+        User userLogged = userRepository.findById(id).orElse(null);
         return AuthResponse.builder()
                 .token(token)
                 .id(id)
+                .success(true)
+                .typeOfUser(userLogged.getTypeOfUser())
                 .build();
     }
 

@@ -96,8 +96,13 @@ public class UserServiceImpl implements UserService {
         if (user.getEmail().length() > 200) {
             throw new ValidationException("El email del usuario no debe exceder los 300 caracteres");
         }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ValidationException("Ya existe un usuario con el email " + user.getEmail());
+
+    }
+
+    @Override
+    public void existsUserByEmail(String email){
+        if (userRepository.existsByEmail(email)) {
+            throw new ValidationException("Ya existe un usuario con el email " + email);
         }
     }
 }
