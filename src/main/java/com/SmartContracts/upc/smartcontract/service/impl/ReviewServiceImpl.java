@@ -49,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
             reviewToUpdate.setTitle(review.getTitle());
             reviewToUpdate.setDescription(review.getDescription());
             reviewToUpdate.setServiceName(review.getServiceName());
-            reviewToUpdate.setStarts(review.getStarts());
+            reviewToUpdate.setStars(review.getStars());
             reviewToUpdate.setAuthorId(review.getAuthorId());
             reviewToUpdate.setServiceId(review.getServiceId());
             reviewToUpdate.setInfluencerId(review.getId());
@@ -89,7 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
         if(review.getServiceName().length() > 150){
             throw new ValidationException("El nombre del servicio de la reseña es extenso");
         }
-        if(review.getStarts() <= 0 || review.getStarts() >5){
+        if(review.getStars() <= 0 || review.getStars() >5){
             throw new ValidationException("La reseña requiere calificación");
         }
         if(review.getServiceId()== null){

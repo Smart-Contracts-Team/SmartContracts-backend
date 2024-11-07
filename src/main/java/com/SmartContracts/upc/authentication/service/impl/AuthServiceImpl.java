@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
         User user = User.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
-                .username(registerRequest.getUsername())
+                .user_name(registerRequest.getUser_name())
                 .typeOfUser(registerRequest.getTypeOfUser())
                 .email(registerRequest.getEmail())
                 .ruc(registerRequest.getRuc())
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
         if(registerRequest == null){
             throw new ValidationException("El formato de registro no tiene que ser nulo.");
         }
-        if(registerRequest.getUsername() == null || registerRequest.getUsername().isEmpty()){
+        if(registerRequest.getUser_name() == null || registerRequest.getUser_name().isEmpty()){
             throw new ValidationException("El usuario necesita especificar su username");
         }
         if (registerRequest.getEmail() == null || registerRequest.getEmail().isEmpty()) {

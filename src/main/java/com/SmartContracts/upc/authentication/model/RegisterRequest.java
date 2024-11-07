@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    private String username;
+    private String user_name;
     private String firstName;
     private String lastName;
     private String typeOfUser;

@@ -47,13 +47,13 @@ public class UserController {
     // Method: PUT
     @Transactional
     @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUserById(@PathVariable(name="userId")Long userId,@RequestBody UserDto user) {
+    public ResponseEntity<UserDto> updateUserById(@PathVariable(name="userId")Long userId,@RequestBody UserDto user) {
         userService.existsUserById(userId);
         userService.validateUser(user);
 
         User responseUser = new User();
         responseUser.setId(userId);
-        responseUser.setUsername(user.getUsername());
+        responseUser.setUser_name(user.getUser_name());
         responseUser.setRuc(user.getRuc());
         responseUser.setFirstName(user.getFirstName());
         responseUser.setLastName(user.getLastName());
@@ -66,13 +66,13 @@ public class UserController {
         responseUser.setRole(user.getRole());
 
         User userSaved = userService.updateUser(responseUser);
-        return new ResponseEntity<User>(userSaved,HttpStatus.OK);
+        return new ResponseEntity<UserDto>(convertToDto(userSaved),HttpStatus.OK);
     }
 
     private UserDto convertToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .user_name(user.getUser_name())
                 .ruc(user.getRuc())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

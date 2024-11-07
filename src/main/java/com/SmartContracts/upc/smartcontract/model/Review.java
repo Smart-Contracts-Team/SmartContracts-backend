@@ -32,7 +32,7 @@ public class Review {
     private LocalDate dateCreated;
 
     @Column(name="stars",nullable = true)
-    private int starts;
+    private int stars;
 
     @Column(name="author_id",nullable = false)
     private Long authorId;
