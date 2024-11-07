@@ -32,7 +32,7 @@ public class ServiceU {
     private Float price;
 
     @Column(name="stars",nullable = true)
-    private int starts;
+    private int stars;
 
     @Column(name="photo",nullable = false)
     private String photo;

@@ -75,7 +75,7 @@ public class ServiceServiceImpl implements ServiceService {
             serviceToUpdate.setName(service.getName());
             serviceToUpdate.setDescription(service.getDescription());
             serviceToUpdate.setPrice(service.getPrice());
-            serviceToUpdate.setStarts(service.getStarts());
+            serviceToUpdate.setStars(service.getStars());
             serviceToUpdate.setPhoto(service.getPhoto());
             serviceToUpdate.setState(service.getState());
             serviceToUpdate.setUserId(service.getUserId());
@@ -162,7 +162,7 @@ public class ServiceServiceImpl implements ServiceService {
         if(service.getPrice() == null || service.getPrice() ==0 ){
             throw new ValidationException("El precio del servicio es obligatorio");
         }
-        if(service.getStarts() <= 0 || service.getStarts() >5){
+        if(service.getStars() <= 0 || service.getStars() >5){
             throw new ValidationException("Las estrellas para el servicio son obligatorias");
         }
         if(service.getPhoto() == null || service.getPhoto().isEmpty()){

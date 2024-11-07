@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         User existingUser = getUserById(user.getId());
         if(existingUser != null){
             User userToUpdate = existingUser;
-            userToUpdate.setUsername(user.getUsername());
+            userToUpdate.setUser_name(user.getUser_name());
             userToUpdate.setRuc(user.getRuc());
             userToUpdate.setFirstName(user.getFirstName());
             userToUpdate.setLastName(user.getLastName());
