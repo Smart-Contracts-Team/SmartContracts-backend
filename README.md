@@ -30,6 +30,12 @@
 | `/api/smartcontract/v1/contract`        | `POST` | `ContractController`  | Crea un nuevo contrato en el sistema.                                                     |
 | `/api/smartcontract/v1/contract/{id}`   | `PUT`  | `ContractController`  | Actualiza la información de un contrato existente.                                        |
 | `/api/smartcontract/v1/contract/{id}`   | `DELETE` | `ContractController`  | Elimina un contrato específico del sistema por su ID.                                   |
+| `/api/smartcontract/v1/ethereum/network`   | `GET` | `EthereumController`  | Obtiene confirmación de la network de ETH                                              |
+| `/api/smartcontract/v1/ethereum/smartcontract`   | `POST` | `EthereumController`  | Crea un SmartContract con businessId e infuencerId                               |
+| `/api/smartcontract/v1/ethereum/smartcontract/{smartContractId}`   | `GET` | `EthereumController`  | Obtiene un SmartContract por un ID                               |
+| `/api/smartcontract/v1/ethereum/smartcontract/balance/{userAddress}`   | `GET` | `EthereumController`  |Elimina un contrato específico del sistema por su ID.          |
+
+
 
 ### Descripción
 
