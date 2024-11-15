@@ -43,6 +43,9 @@ public class Contract {
     @Column(name = "type", nullable = false, length = 50)
     private String type;
 
+    @Column(name = "hash_contract", nullable = true, length = 300)
+    private String hash;
+
     @Column(name = "business_id", nullable = true)
     private Long businessId;
 
