@@ -53,6 +53,7 @@ public class ContractServiceImpl implements ContractService {
             contractToUpdate.setStartDate(contract.getStartDate());
             contractToUpdate.setFinalDate(contract.getFinalDate());
             contractToUpdate.setStatus(contract.getStatus());
+            contractToUpdate.setHash(contract.getHash());
             contractToUpdate.setType(contract.getType());
             contractToUpdate.setBusinessId(contract.getBusinessId());
             contractToUpdate.setInfluencerId(contract.getInfluencerId());
