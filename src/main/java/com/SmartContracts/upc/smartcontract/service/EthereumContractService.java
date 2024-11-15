@@ -2,18 +2,24 @@ package com.SmartContracts.upc.smartcontract.service;
 
 import com.SmartContracts.upc.exception.ValidationException;
 import com.SmartContracts.upc.smartcontract.model.MySmartContract;
+import com.SmartContracts.upc.smartcontract.model.SmartContractInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tuples.generated.Tuple3;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.abi.datatypes.Type;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EthereumContractService {
@@ -27,8 +33,8 @@ public class EthereumContractService {
         this.web3j = web3j;
 
         // Dirección de tu contrato y clave privada de la cuenta
-        String contractAddress = "0x87743eaa69e9e30c82c0381eac9aec59f5c436d7"; // Reemplaza con tu dirección de contrato
-        String privateKey = "eb06a392d30f77ef985bb36c36c7f8aa47e79c63d3c24fcdb2a811ae46e1fe13"; // Reemplaza con tu clave privada
+        String contractAddress = "0xb46d72b7c5d261c88afd7538ef38a1ec953ade33"; // Reemplaza con tu dirección de contrato
+        String privateKey = "eb06a392d30f77ef985bb36c36c7f8aa47e79c63d3c24fcdb2a811ae46e1fe13"; // clave privada
 
         // Obtén el gasPrice actual de la red
         BigInteger gasPrice;
@@ -42,7 +48,7 @@ public class EthereumContractService {
 
         // Configura el gasLimit basado en el contrato (puedes ajustarlo si es necesario)
         BigInteger gasLimit = BigInteger.valueOf(300000); // Ajusta este valor según lo requerido
-        System.out.println("Gas Limit: " + gasLimit); // Mostrar el gasLimit
+        //System.out.println("Gas Limit: " + gasLimit); // Mostrar el gasLimit
 
         // Inicializar Web3j y el contrato
         ContractGasProvider gasProvider = new DefaultGasProvider();
@@ -55,16 +61,16 @@ public class EthereumContractService {
     }
 
     // Método para llamar a la función 'createContract' del contrato
-    public String createContract(BigInteger businessId, BigInteger influencerId, String userAddress) throws Exception {
+    public SmartContractInfo createContract(BigInteger businessId, BigInteger influencerId, String userAddress) throws Exception {
         // Verificar el saldo del usuario antes de proceder con la transacción
         BigInteger balance = getBalance(userAddress);
-        System.out.println("Saldo disponible: " + balance);
+        //System.out.println("Saldo disponible: " + balance);
 
         // Obtener el precio y límite de gas para calcular el costo estimado de la transacción
         BigInteger gasPrice = contract.getGasPrice();
         BigInteger gasLimit = BigInteger.valueOf(300000); // Ajusta según los requisitos específicos del contrato
         BigInteger estimatedTransactionCost = gasPrice.multiply(gasLimit);
-        System.out.println("Costo estimado de la transacción: " + estimatedTransactionCost);
+        //System.out.println("Costo estimado de la transacción: " + estimatedTransactionCost);
 
         // Verificar si el saldo es suficiente para cubrir el costo de la transacción
         if (balance.compareTo(estimatedTransactionCost) < 0) {
@@ -76,18 +82,20 @@ public class EthereumContractService {
             RemoteFunctionCall<TransactionReceipt> transaction = contract.createContract(businessId, influencerId);
 
             // Mostrar el gasPrice y gasLimit antes de enviar la transacción para depuración
-            System.out.println("Gas Price (enviar transacción): " + contract.getGasPrice());
-            System.out.println("Gas Limit (enviar transacción): " + gasLimit);
+            //System.out.println("Gas Price (enviar transacción): " + contract.getGasPrice());
+            //System.out.println("Gas Limit (enviar transacción): " + gasLimit);
 
             // Enviar la transacción
             TransactionReceipt receipt = transaction.send();
-            System.out.println("Recibo de transacción: " + receipt.getTransactionHash());
+            //System.out.println("Recibo de transacción: " + receipt.getTransactionHash());
 
-            // Retornar el hash de la transacción como confirmación
-            return receipt.getTransactionHash();
+            // Obtener el gas utilizado de la transacción
+            BigInteger gasUsed = receipt.getGasUsed();
+
+            return new SmartContractInfo(receipt.getTransactionHash(), receipt.getStatus(), gasUsed);
 
         } catch (Exception e) {
-            System.out.println("Error al enviar la transacción: " + e.getMessage());
+            //System.out.println("Error al enviar la transacción: " + e.getMessage());
             throw new Exception("Transacción fallida: " + e.getMessage(), e);
         }
     }
@@ -102,4 +110,31 @@ public class EthereumContractService {
             throw new Exception("Error al obtener el balance", e);
         }
     }
+
+    public ArrayList<BigInteger> getContractDetails(BigInteger contractId) throws Exception {
+        try {
+            // Llamada al contrato inteligente para obtener los datos
+            Tuple3<BigInteger, BigInteger, BigInteger> result = contract.getContract(contractId).send();
+
+            // Create a list of Type for compatibility with executeCallMultipleValueReturn
+            List<Type> resultList = new ArrayList<>();
+            resultList.add(new Uint256(result.getValue1()));  // contractId
+            resultList.add(new Uint256(result.getValue2()));  // businessId
+            resultList.add(new Uint256(result.getValue3()));  // influencerId
+
+            // Create an ArrayList to return the values as BigInteger
+            ArrayList<BigInteger> contractInfo = new ArrayList<>();
+            contractInfo.add((BigInteger) resultList.get(0).getValue());  // contractId
+            contractInfo.add((BigInteger) resultList.get(1).getValue());  // businessId
+            contractInfo.add((BigInteger) resultList.get(2).getValue());  // influencerId
+
+            return contractInfo;
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener el contrato: " + e.getMessage());
+            throw new Exception("No se pudo obtener el contrato: " + e.getMessage(), e);
+        }
+    }
+
+
 }

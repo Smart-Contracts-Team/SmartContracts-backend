@@ -1,6 +1,7 @@
 package com.SmartContracts.upc.smartcontract.controller;
 
 import com.SmartContracts.upc.smartcontract.model.ContractDto;
+import com.SmartContracts.upc.smartcontract.model.SmartContractInfo;
 import com.SmartContracts.upc.smartcontract.service.EthereumContractService;
 import com.SmartContracts.upc.smartcontract.service.EthereumService;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("api/smartcontract/v1/ethereum")
@@ -38,7 +40,7 @@ public class EthereumController{
     // Method: POST
     @Transactional
     @PostMapping("/smartcontract")
-    public ResponseEntity<String> createSmartContract(@RequestBody ContractDto contractDto){
+    public ResponseEntity<SmartContractInfo> createSmartContract(@RequestBody ContractDto contractDto){
         try {
 
 
@@ -46,13 +48,27 @@ public class EthereumController{
             BigInteger influencerId = BigInteger.valueOf(contractDto.getInfluencerId().longValue());
 
 
-            String messageSuccess = ethereumContractService.createContract(businessId, influencerId,"" +
+            SmartContractInfo smartContractInfo = ethereumContractService.createContract(businessId, influencerId,"" +
                     "0xfE1F769BBd37f29BDC99F79e038A0652881a9aB1");
 
-            return new ResponseEntity<String>(messageSuccess, HttpStatus.CREATED);
+            return new ResponseEntity<SmartContractInfo>(smartContractInfo, HttpStatus.CREATED);
         } catch (Exception e) {
 
-            return new ResponseEntity<String>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<SmartContractInfo>(new SmartContractInfo(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // URL: http://localhost:8080/api/smartcontract/v1/ethereum/smartcontract/{smartcontractId}
+    // Method: GET
+    @Transactional
+    @GetMapping("/smartcontract/{smartcontractId}")
+    public ResponseEntity<ArrayList<BigInteger>> getSmartContractDetails(@PathVariable(name="smartcontractId")BigInteger smartcontractId){
+        try {
+
+            return new ResponseEntity<ArrayList<BigInteger> >(ethereumContractService.getContractDetails(smartcontractId), HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<ArrayList<BigInteger> >(new ArrayList<BigInteger>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
