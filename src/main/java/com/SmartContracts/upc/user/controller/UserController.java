@@ -58,6 +58,7 @@ public class UserController {
         responseUser.setFirstName(user.getFirstName());
         responseUser.setLastName(user.getLastName());
         responseUser.setTypeOfUser(user.getTypeOfUser());
+        responseUser.setCategory(user.getCategory());
         responseUser.setEmail(user.getEmail());
         responseUser.setBirthDate(user.getBirthDate());
         responseUser.setPhoto(user.getPhoto());
@@ -76,6 +77,7 @@ public class UserController {
                 .ruc(user.getRuc())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .category(user.getCategory())
                 .typeOfUser(user.getTypeOfUser())
                 .email(user.getEmail())
                 .phone(user.getPhone())

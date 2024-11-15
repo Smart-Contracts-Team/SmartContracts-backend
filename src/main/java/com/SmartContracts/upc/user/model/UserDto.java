@@ -16,6 +16,7 @@ public class UserDto {
     private String user_name;
     private String firstName;
     private String lastName;
+    private String category;
     private String typeOfUser;
     private String ruc;
     private String email;
