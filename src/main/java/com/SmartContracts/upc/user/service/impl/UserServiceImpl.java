@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setRuc(user.getRuc());
             userToUpdate.setFirstName(user.getFirstName());
             userToUpdate.setLastName(user.getLastName());
+            userToUpdate.setCategory(user.getCategory());
             userToUpdate.setTypeOfUser(user.getTypeOfUser());
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setBirthDate(user.getBirthDate());

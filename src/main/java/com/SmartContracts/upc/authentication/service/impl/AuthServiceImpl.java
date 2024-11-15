@@ -38,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(registerRequest.getLastName())
                 .user_name(registerRequest.getUser_name())
                 .typeOfUser(registerRequest.getTypeOfUser())
+                .category(registerRequest.getCategory())
                 .email(registerRequest.getEmail())
                 .ruc(registerRequest.getRuc())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))

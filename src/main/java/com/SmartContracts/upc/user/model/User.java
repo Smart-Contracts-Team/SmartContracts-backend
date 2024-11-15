@@ -36,6 +36,9 @@ public class User implements UserDetails {
     @Column(name="type_of_user", nullable = false, length = 100)
     private String typeOfUser;
 
+    @Column(name="category", nullable = true, length = 100)
+    private String category;
+
     @Column(name="ruc", nullable = true)
     private String ruc;
 
