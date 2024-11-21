@@ -40,6 +40,7 @@ public class Review {
     @Column(name="influencer_id",nullable = false)
     private Long influencerId;
 
-    @Column(name="service_id",nullable = false)
-    private Long serviceId;
+    @ManyToOne
+    @JoinColumn(name = "service_id", nullable = false)
+    private ServiceU service;
 }

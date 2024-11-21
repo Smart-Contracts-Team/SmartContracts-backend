@@ -1,5 +1,6 @@
 package com.SmartContracts.upc.smartcontract.controller;
 
+import com.SmartContracts.upc.smartcontract.model.Contract;
 import com.SmartContracts.upc.smartcontract.model.ContractDto;
 import com.SmartContracts.upc.smartcontract.model.SmartContractInfo;
 import com.SmartContracts.upc.smartcontract.service.EthereumContractService;
@@ -48,13 +49,15 @@ public class EthereumController{
             BigInteger influencerId = BigInteger.valueOf(contractDto.getInfluencerId().longValue());
 
 
-            SmartContractInfo smartContractInfo = ethereumContractService.createContract(businessId, influencerId,"" +
+            SmartContractInfo smartContractInfo = ethereumContractService.createContract(businessId, influencerId,
                     "0xfE1F769BBd37f29BDC99F79e038A0652881a9aB1");
 
             return new ResponseEntity<SmartContractInfo>(smartContractInfo, HttpStatus.CREATED);
         } catch (Exception e) {
 
-            return new ResponseEntity<SmartContractInfo>(new SmartContractInfo(), HttpStatus.INTERNAL_SERVER_ERROR);
+            SmartContractInfo smartContractInfo = new SmartContractInfo();
+            smartContractInfo.setTransactionHash(e.getMessage());
+            return new ResponseEntity<SmartContractInfo>(smartContractInfo, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -83,5 +86,26 @@ public class EthereumController{
             return new ResponseEntity<BigInteger>(BigInteger.ZERO,HttpStatus.NOT_FOUND);
         }
     }
+
+    // URL: http://localhost:8080/api/smartcontract/v1/ethereum/smartcontract/{smartcontractId}
+    // Method: PUT
+    @Transactional
+    @PutMapping("/smartcontract/{smartcontractId}")
+    public ResponseEntity<SmartContractInfo> updateSmartContract(@PathVariable(name="smartcontractId")BigInteger smartcontractId, @RequestBody ContractDto contractDto){
+
+        try{
+            BigInteger businessId = BigInteger.valueOf(contractDto.getBusinessId().longValue());
+            BigInteger influencerId = BigInteger.valueOf(contractDto.getInfluencerId().longValue());
+
+
+            SmartContractInfo smartContractInfo = ethereumContractService.updateContract(smartcontractId, businessId,influencerId,
+                    "0xfE1F769BBd37f29BDC99F79e038A0652881a9aB1");
+            return new ResponseEntity<SmartContractInfo>(smartContractInfo, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<SmartContractInfo>(new SmartContractInfo(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
 
 }
