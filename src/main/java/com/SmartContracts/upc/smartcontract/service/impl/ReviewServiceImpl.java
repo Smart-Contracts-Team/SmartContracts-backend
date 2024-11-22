@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
             reviewToUpdate.setServiceName(review.getServiceName());
             reviewToUpdate.setStars(review.getStars());
             reviewToUpdate.setAuthorId(review.getAuthorId());
-            reviewToUpdate.setServiceId(review.getServiceId());
+            reviewToUpdate.setService(review.getService());
             reviewToUpdate.setInfluencerId(review.getId());
 
             return reviewRepository.save(reviewToUpdate);
@@ -92,7 +92,7 @@ public class ReviewServiceImpl implements ReviewService {
         if(review.getStars() <= 0 || review.getStars() >5){
             throw new ValidationException("La reseña requiere calificación");
         }
-        if(review.getServiceId()== null){
+        if(review.getService()== null){
             throw new ValidationException("La reseña necesita especificar el servicio");
         }
         if(review.getAuthorId() == null){

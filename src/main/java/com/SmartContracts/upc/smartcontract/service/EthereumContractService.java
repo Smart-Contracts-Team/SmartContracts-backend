@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Keys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteFunctionCall;
@@ -34,6 +35,9 @@ public class EthereumContractService {
 
         // Dirección de tu contrato y clave privada de la cuenta
         String contractAddress = "0xb46d72b7c5d261c88afd7538ef38a1ec953ade33"; // Reemplaza con tu dirección de contrato
+        String rawContractAddress = Keys.toChecksumAddress(contractAddress); // Verificar dirección checksummed
+        System.out.println("Contract Address (Checksum): " + rawContractAddress);
+
         String privateKey = "eb06a392d30f77ef985bb36c36c7f8aa47e79c63d3c24fcdb2a811ae46e1fe13"; // clave privada
 
         // Obtén el gasPrice actual de la red
@@ -47,8 +51,7 @@ public class EthereumContractService {
         }
 
         // Configura el gasLimit basado en el contrato (puedes ajustarlo si es necesario)
-        BigInteger gasLimit = BigInteger.valueOf(300000); // Ajusta este valor según lo requerido
-        //System.out.println("Gas Limit: " + gasLimit); // Mostrar el gasLimit
+        BigInteger gasLimit = BigInteger.valueOf(300000);
 
         // Inicializar Web3j y el contrato
         ContractGasProvider gasProvider = new DefaultGasProvider();
@@ -135,6 +138,34 @@ public class EthereumContractService {
             throw new Exception("No se pudo obtener el contrato: " + e.getMessage(), e);
         }
     }
+    // Método para llamar a la función 'updateContract' del contrato
+    public SmartContractInfo updateContract(BigInteger contractId, BigInteger newBusinessId, BigInteger newInfluencerId,String userAddress) throws Exception {
+        // Verificar el saldo del usuario antes de proceder con la transacción
+        BigInteger balance = getBalance(userAddress);
+        BigInteger gasPrice = contract.getGasPrice();
+        BigInteger gasLimit = BigInteger.valueOf(300000);
+        BigInteger estimatedTransactionCost = gasPrice.multiply(gasLimit);
 
+        // Verificar si el saldo es suficiente para cubrir el costo de la transacción
+        if (balance.compareTo(estimatedTransactionCost) < 0) {
+            throw new Exception("Fondos insuficientes para cubrir el gas de la transacción.");
+        }
+
+        try {
+            // Crear una llamada remota para la función updateContract en el contrato inteligente
+            RemoteFunctionCall<TransactionReceipt> transaction = contract.updateContract(contractId, newBusinessId, newInfluencerId);
+
+            // Enviar la transacción
+            TransactionReceipt receipt = transaction.send();
+
+            // Obtener el gas utilizado de la transacción
+            BigInteger gasUsed = receipt.getGasUsed();
+
+            return new SmartContractInfo(receipt.getTransactionHash(), receipt.getStatus(), gasUsed);
+
+        } catch (Exception e) {
+            throw new Exception("Transacción fallida: " + e.getMessage(), e);
+        }
+    }
 
 }
